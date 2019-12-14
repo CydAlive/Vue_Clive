@@ -16,7 +16,7 @@
         unique-opened :collapse="istogglefn" :collapse-transition="false" router :default-active="isactivechange">
           <div class="togglecoll" @click="togglefn">|||</div>
           <!-- 一级菜单 -->
-          <el-submenu :index="item.id" v-for="item in menulist" :key="item.id">
+          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
             <!-- 一级菜单模板区域 -->
             <template slot="title">
               <i :class="iconsObj[item.id]"></i>
@@ -71,7 +71,6 @@ export default {
     // 获取所有菜单
     async getMenulist() {
       const { data: res } = await this.$http.get('menus')
-      console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.status)
       this.menulist = res.data
     },
