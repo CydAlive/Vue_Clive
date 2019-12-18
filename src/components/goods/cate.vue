@@ -10,11 +10,12 @@
     <el-card>
       <el-row>
         <el-col>
-          <el-button type="primary">添加分类</el-button>
+          <el-button type="primary" @click="addCateToggleVisible">添加分类</el-button>
         </el-col>
       </el-row>
       <!-- 内容区域 -->
       <tree-table
+        class="tree-table-m20"
         :data="catelist"
         :columns="columns"
         show-index
@@ -52,6 +53,23 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 添加分类对话框 -->
+    <el-dialog title="提示" :visible.sync="addCateDialogVisible" width="40%">
+      <el-form
+        ref="addCateFormRef"
+        :model="addCateFormData"
+        :rules="addCateFormRules"
+        label-width="80px"
+      >
+        <el-form-item label="活动名称" prop="cat_name">
+          <el-input v-model="addCateFormData.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addCateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCateDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -63,6 +81,16 @@ export default {
         type: 3,
         pagenum: 1,
         pagesize: 10
+      },
+      addCateDialogVisible: false,
+      addCateFormData: {
+        cat_name: ''
+      },
+      addCateFormRules: {
+        cat_name: [
+          { required: true, message: '请输入分类名称', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ]
       },
       total: 0,
       catelist: [],
@@ -114,10 +142,16 @@ export default {
     handleCurrentChange(newpage) {
       this.queryInfo.pagenum = newpage
       this.getShopList()
+    },
+    addCateToggleVisible() {
+      this.addCateDialogVisible = true
     }
   }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.tree-table-m20 {
+  margin: 15px 0;
+}
 </style>
